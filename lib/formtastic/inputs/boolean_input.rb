@@ -80,7 +80,7 @@ module Formtastic
       end
 
       def input_html_options
-        {:name => input_html_options_name, class: 'form-check-input'}.merge(super)
+        {:name => input_html_options_name, class: 'form-check-input me-2'}.merge(super)
       end
       
       def input_html_options_name
