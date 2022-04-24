@@ -98,14 +98,14 @@ module Formtastic
             fragments_wrapping do
               hidden_fragments <<
               fragments_label <<
-              template.content_tag(:ol,
+              template.content_tag(:div,
                 fragments.map do |fragment|
                   fragment_wrapping do
                     fragment_label_html(fragment) <<
                     fragment_input_html(fragment)
                   end
                 end.join.html_safe, # TODO is this safe?
-                { :class => 'fragments-group' } # TODO refactor to fragments_group_wrapping
+                { :class => 'fragments-group row' } # TODO refactor to fragments_group_wrapping
               )
             end
           end
@@ -128,7 +128,7 @@ module Formtastic
         end
         
         def fragment_wrapping(&block)
-          template.content_tag(:li, template.capture(&block), fragment_wrapping_html_options)
+          template.content_tag(:div, template.capture(&block), fragment_wrapping_html_options.merge({ class: 'col' }))
         end
         
         def fragment_wrapping_html_options
@@ -156,7 +156,7 @@ module Formtastic
         
         def fragment_label_html(fragment)
           text = fragment_label(fragment)
-          text.blank? ? "".html_safe : template.content_tag(:label, text, :for => fragment_id(fragment))
+          text.blank? ? "".html_safe : template.content_tag(:label, text, { class: 'form-label', :for => fragment_id(fragment) })
         end
         
         def value
@@ -166,7 +166,7 @@ module Formtastic
         
         def fragment_input_html(fragment)
           opts = input_options.merge(:prefix => fragment_prefix, :field_name => fragment_name(fragment), :default => value, :include_blank => include_blank?)
-          template.send(:"select_#{fragment}", value, opts, input_html_options.merge(:id => fragment_id(fragment)))
+          template.send(:"select_#{fragment}", value, opts, input_html_options.merge(:id => fragment_id(fragment), class: 'form-select'))
         end
         
         def fragment_prefix
@@ -200,10 +200,12 @@ module Formtastic
         end
         
         def fragments_wrapping(&block)
-          template.content_tag(:fieldset,
-            template.capture(&block).html_safe, 
-            fragments_wrapping_html_options
-          )
+          # template.content_tag(:fieldset,
+          #   template.capture(&block).html_safe, 
+          #   fragments_wrapping_html_options
+          # )
+          template.capture(&block).html_safe
+          # template.content_tag(:div, template.capture(&block).html_safe, { class: 'row' })
         end
         
         def fragments_wrapping_html_options
@@ -212,19 +214,20 @@ module Formtastic
         
         def fragments_label
           if render_label?
-            template.content_tag(:legend, 
-              builder.label(method, label_text, :for => fragment_id(fragments.first)), 
-              :class => "label"
-            )
+            # template.content_tag(:legend, 
+            #   builder.label(method, label_text, :for => fragment_id(fragments.first)), 
+            #   :class => "label"
+            # )
+            builder.label(method, label_text, { class: 'form-label', :for => fragment_id(fragments.first) })
           else
             "".html_safe
           end
         end
         
         def fragments_inner_wrapping(&block)
-          template.content_tag(:ol,
+          # template.content_tag(:ol,
             template.capture(&block)
-          )
+          # )
         end
         
         def hidden_fragments

@@ -25,6 +25,13 @@ module Formtastic
         contents = args[-1].is_a?(::Hash) ? '' : args.pop.flatten
         html_options = args.extract_options!
 
+        extra_classes = 'card mb-3'
+        if html_options[:class].present?
+          html_options[:class] += ' ' + extra_classes
+        else
+          html_options[:class] = extra_classes
+        end
+
         if block_given?
           contents = if template.respond_to?(:is_haml?) && template.is_haml?
             template.capture_haml(&block)
@@ -41,7 +48,7 @@ module Formtastic
 
         legend = field_set_legend(html_options)
         fieldset = template.content_tag(:fieldset,
-          legend.html_safe << template.content_tag(:ol, contents.html_safe),
+          legend.html_safe << template.content_tag(:div, contents.html_safe, { class: 'card-body' }),
           html_options.except(:builder, :parent, :name)
         )
 

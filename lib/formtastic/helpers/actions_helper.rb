@@ -149,14 +149,38 @@ module Formtastic
         html_options[:class] ||= "actions"
 
         if block_given?
-          field_set_and_list_wrapping(html_options, &block)
+          inline_row_wrapping(html_options, &block)
         else
           args = default_actions if args.empty?
           contents = args.map { |action_name| action(action_name) }
-          field_set_and_list_wrapping(html_options, contents)
+          inline_row_wrapping(html_options, contents)
         end
       end
 
+      def inline_row_wrapping(*args, &block) # @private
+        contents = args[-1].is_a?(::Hash) ? '' : args.pop.flatten
+        html_options = args.extract_options!
+
+        if block_given?
+          contents = if template.respond_to?(:is_haml?) && template.is_haml?
+            template.capture_haml(&block)
+          else
+            template.capture(&block)
+          end
+        end
+
+        # Work-around for empty contents block
+        contents ||= ""
+
+        # Ruby 1.9: String#to_s behavior changed, need to make an explicit join.
+        contents = contents.join if contents.respond_to?(:join)
+
+        template.content_tag(:div,
+          contents.html_safe,
+          { class: 'd-flex flex-row' }.merge(html_options.except(:builder, :parent, :name))
+        )
+      end
+      
       protected
       
       def default_actions

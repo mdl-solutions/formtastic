@@ -35,6 +35,7 @@ module Formtastic
       def to_html
         input_wrapping do
           hidden_field_html <<
+          check_box_html <<
           label_with_nested_checkbox
         end
       end
@@ -46,7 +47,7 @@ module Formtastic
       def label_with_nested_checkbox
         builder.label(
           method,
-          label_text_with_embedded_checkbox,
+          label_text, #label_text_with_embedded_checkbox,
           label_html_options
         )
       end
@@ -54,7 +55,7 @@ module Formtastic
       def label_html_options
         {
           :for => input_html_options[:id],
-          :class => super[:class] - ['label'] # remove 'label' class
+          :class => (super[:class] - ['label']) + ['form-check-label'] # remove 'label' class
         }
       end
 
@@ -79,7 +80,7 @@ module Formtastic
       end
 
       def input_html_options
-        {:name => input_html_options_name}.merge(super)
+        {:name => input_html_options_name, class: 'form-check-input'}.merge(super)
       end
       
       def input_html_options_name

@@ -91,10 +91,15 @@ module Formtastic
       end
 
       def choice_html(choice)
-        template.content_tag(
+        # template.content_tag(
+        #   :label,
+        #   checkbox_input(choice) + choice_label(choice),
+        #   label_html_options.merge(:for => choice_input_dom_id(choice), :class => nil)
+        # )
+        checkbox_input(choice) + template.content_tag(
           :label,
-          checkbox_input(choice) + choice_label(choice),
-          label_html_options.merge(:for => choice_input_dom_id(choice), :class => nil)
+          choice_label(choice),
+          label_html_options.merge(:for => choice_input_dom_id(choice), :class => 'form-check-label ms-1')
         )
       end
 
@@ -117,7 +122,7 @@ module Formtastic
         value = choice_value(choice)
         builder.check_box(
           association_primary_key || method,
-          extra_html_options(choice).merge(:id => choice_input_dom_id(choice), :name => input_name, :disabled => disabled?(value), :required => false),
+          extra_html_options(choice).merge(:id => choice_input_dom_id(choice), :class => 'form-check-input ms-0', :name => input_name, :disabled => disabled?(value), :required => false),
           value,
           unchecked_value
         )
@@ -129,7 +134,7 @@ module Formtastic
           input_name,
           value,
           checked?(value),
-          extra_html_options(choice).merge(:id => choice_input_dom_id(choice), :disabled => disabled?(value), :required => false)
+          extra_html_options(choice).merge(:id => choice_input_dom_id(choice), :class => 'form-check-input ms-0', :disabled => disabled?(value), :required => false)
         )
       end
 

@@ -4,10 +4,11 @@ module Formtastic
       module Choices
 
         def choices_wrapping(&block)
-          template.content_tag(:fieldset,
-            template.capture(&block),
-            choices_wrapping_html_options
-          )
+          # template.content_tag(:fieldset,
+          #   template.capture(&block),
+          #   choices_wrapping_html_options
+          # )
+          template.capture(&block)
         end
 
         def choices_wrapping_html_options
@@ -15,9 +16,19 @@ module Formtastic
         end
 
         def choices_group_wrapping(&block)
-          template.content_tag(:ol,
-            template.capture(&block),
-            choices_group_wrapping_html_options
+          # template.content_tag(:ol,
+          #   template.capture(&block),
+          #   choices_group_wrapping_html_options
+          # )
+          template.content_tag(:div,
+            template.content_tag(:div,
+              template.content_tag(:div,
+                template.capture(&block),
+                { class: 'row' }
+              ),
+              { class: 'card-body' }
+            ),
+            { class: 'card' }
           )
         end
 
@@ -26,14 +37,14 @@ module Formtastic
         end
 
         def choice_wrapping(html_options, &block)
-          template.content_tag(:li,
+          template.content_tag(:div,
             template.capture(&block),
             html_options
           )
         end
 
         def choice_wrapping_html_options(choice)
-          classes = ['choice']
+          classes = ['choice form-check col-lg-3 col-md-4 col-sm-6 col-xs-12']
           classes << "#{sanitized_method_name.singularize}_#{choice_html_safe_value(choice)}" if value_as_class?
 
           { :class => classes.join(" ") }
@@ -87,10 +98,11 @@ module Formtastic
 
         def legend_html
           if render_label?
-            template.content_tag(:legend,
-              template.content_tag(:label, label_text),
-              label_html_options.merge(:class => "label")
-            )
+            # template.content_tag(:legend,
+            #   template.content_tag(:label, label_text),
+            #   label_html_options.merge(:class => "label")
+            # )
+            template.content_tag(:label, label_text, label_html_options.merge(:class => "form-label"))
           else
             "".html_safe
           end

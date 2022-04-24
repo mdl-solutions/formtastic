@@ -21,7 +21,7 @@ module Formtastic
       end
       
       def wrapper(&block)
-        template.content_tag(:li, 
+        template.content_tag(:div, 
           template.capture(&block), 
           wrapper_html_options
         )

@@ -14,6 +14,7 @@ module Formtastic
         # Overrides standard `input_html_options` to provide a `maxlength` and `size` attribute.
         def input_html_options
           {
+            :class => 'form-control',
             :maxlength => maxlength,
             :size => size
           }.merge(super)

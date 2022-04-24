@@ -31,6 +31,7 @@ module Formtastic
       
       def input_html_options
         { 
+          :class => 'form-control',
           :cols => builder.default_text_area_width,
           :rows => builder.default_text_area_height
         }.merge(super)
