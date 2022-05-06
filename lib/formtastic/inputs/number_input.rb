@@ -72,6 +72,12 @@ module Formtastic
       include Base::Numeric
       include Base::Placeholder
       
+      def input_html_options
+        { 
+          :class => 'form-control',
+        }.merge(super)
+      end
+
       def to_html
         input_wrapping do
           label_html <<
