@@ -72,11 +72,23 @@ module Formtastic
       include Base::Numeric
       include Base::Placeholder
       
-      def input_html_options
-        { 
-          :class => 'form-control',
-        }.merge(super)
+      def initialize(*args)
+        super
+        
+        extra_classes = 'form-control'
+        if @options.dig(:input_html, :class).present?
+          @options[:input_html][:class] += ' ' + extra_classes
+        else
+          @options[:input_html] ||= {}
+          @options[:input_html][:class] = extra_classes
+        end
       end
+
+      # def input_html_options
+      #   { 
+      #     :class => 'form-control',
+      #   }.merge(super)
+      # end
 
       def to_html
         input_wrapping do

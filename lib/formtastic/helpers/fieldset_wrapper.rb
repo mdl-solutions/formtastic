@@ -47,8 +47,9 @@ module Formtastic
         contents = contents.join if contents.respond_to?(:join)
 
         legend = field_set_legend(html_options)
-        fieldset = template.content_tag(:fieldset,
-          legend.html_safe << template.content_tag(:div, contents.html_safe, { class: 'card-body' }),
+        fieldset = template.content_tag(:div,
+          legend.html_safe << 
+          template.content_tag(:div, contents.html_safe, { class: 'card-body' }),
           html_options.except(:builder, :parent, :name)
         )
 
@@ -59,7 +60,7 @@ module Formtastic
         legend  = (html_options[:name] || '').to_s
        	# only applying if String includes '%i' avoids argument error when $DEBUG is true
         legend %= parent_child_index(html_options[:parent]) if html_options[:parent] && legend.include?('%i')
-        legend  = template.content_tag(:legend, template.content_tag(:span, legend.html_safe)) unless legend.blank?
+        legend  = template.content_tag(:div, template.content_tag(:span, legend.html_safe), { class: 'card-header' }) unless legend.blank?
         legend
       end
 

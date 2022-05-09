@@ -160,6 +160,14 @@ module Formtastic
       def initialize(*args)
         super
         raise Formtastic::UnsupportedEnumCollection if collection_from_enum? && multiple?
+        
+        extra_classes = 'form-select'
+        if @options.dig(:input_html, :class).present?
+          @options[:input_html][:class] += ' ' + extra_classes
+        else
+          @options[:input_html] ||= {}
+          @options[:input_html][:class] = extra_classes
+        end
       end
 
       def to_html
@@ -197,7 +205,6 @@ module Formtastic
         {
           :multiple => multiple?,
           :name => multiple? ? input_html_options_name_multiple : input_html_options_name,
-          class: 'form-select',
         }
         
         
